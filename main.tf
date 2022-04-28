@@ -88,3 +88,8 @@ resource "azurerm_storage_account" "vault_blob" {
   shared_access_key_enabled = true
 }
 
+resource "azurerm_storage_container" "example" {
+  name                  = "backend"
+  storage_account_name  = azurerm_storage_account.vault_blob.name
+  container_access_type = "private"
+}
