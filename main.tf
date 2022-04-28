@@ -76,3 +76,15 @@ resource "azurerm_key_vault_key" "generated" {
     "unwrapKey",
   ]
 }
+
+# setup storage account
+resource "azurerm_storage_account" "vault_blob" {
+  name                      = "bradfordwagnervault"
+  account_tier              = "Standard"
+  account_kind              = "BlobStorage"
+  account_replication_type  = "GRS"
+  resource_group_name       = azurerm_resource_group.vault.name
+  location                  = azurerm_resource_group.vault.location
+  shared_access_key_enabled = true
+}
+
