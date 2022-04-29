@@ -4,7 +4,7 @@ terraform {
     resource_group_name  = "storage-rg"
     storage_account_name = "tfstate25484"
     container_name       = "tfstate"
-    key                  = "tf-vault"
+    key                  = "tf-vault-infra"
   }
 }
 
