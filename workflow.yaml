@@ -28,8 +28,6 @@ spec:
             value: "{{ inputs.parameters.git_version }}"
           - name: terraform_image
             value: quay.io/bradfordwagner/terraform:1.2.2-ubuntu_bionic-linux_amd64
-          - name: upstream_tag
-            value: "{{ inputs.parameters.upstream_tag }}"
         templateRef:
           name: flavor-terraform-template
           template: "{{inputs.parameters.git_ref_type}}"
