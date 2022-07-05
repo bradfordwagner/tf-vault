@@ -17,10 +17,6 @@ spec:
       parameters:
       - name: git_ref_type
       - name: git_version
-      - name: upstream_repo
-        value: quay.io/bradfordwagner/terraform
-      - name: upstream_tag
-        value: 1.0.0
     dag:
       tasks:
       - name: terraform
@@ -30,13 +26,11 @@ spec:
             value: https://github.com/bradfordwagner/tf-vault-infra.git
           - name: git_version
             value: "{{ inputs.parameters.git_version }}"
-          - name: upstream_repo
-            value: "{{ inputs.parameters.upstream_repo }}"
+          - name: terraform_image
+            value: quay.io/bradfordwagner/terraform:1.2.2-ubuntu_bionic-linux_amd64
           - name: upstream_tag
             value: "{{ inputs.parameters.upstream_tag }}"
         templateRef:
           name: flavor-terraform-template
           template: "{{inputs.parameters.git_ref_type}}"
-        withItems:
-        - { platform: alpine_3.14     , runtime_platforms: [linux/arm64] }
 
