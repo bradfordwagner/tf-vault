@@ -27,7 +27,12 @@ spec:
           - name: git_version
             value: "{{ inputs.parameters.git_version }}"
           - name: terraform_image
-            value: quay.io/bradfordwagner/terraform:1.2.2-ubuntu_bionic-linux_amd64
+            value: quay.io/bradfordwagner/terraform:1.4.1-ubuntu_bionic-linux_amd64
+          - name: vault_secrets_enabled
+            value: true
+          - name: vault_env_secrets_paths
+            value: |
+              ["secret/go_releaser"]
         templateRef:
           name: flavor-terraform-template
           template: "{{inputs.parameters.git_ref_type}}"
