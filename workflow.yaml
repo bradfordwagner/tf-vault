@@ -11,6 +11,7 @@ spec:
     - name: git_ref_type
       value: branches
     - name: git_version
+      value: main
   templates:
   - name: main
     inputs:
@@ -22,6 +23,8 @@ spec:
       - name: terraform
         arguments:
           parameters:
+          - name: git_ref_type
+            value: "{{ inputs.parameters.git_ref_type }}"
           - name: git_repo
             value: https://github.com/bradfordwagner/tf-vault-infra.git
           - name: git_version
@@ -30,10 +33,12 @@ spec:
             value: quay.io/bradfordwagner/terraform:1.4.1-ubuntu_bionic-linux_amd64
           - name: vault_secrets_enabled
             value: true
+          - name: vault_role
+            value: vault_policy_scaffolding
           - name: vault_env_secrets_paths
             value: |
-              ["secret/go_releaser"]
+              ["secret/azure/sp/infra"]
         templateRef:
           name: flavor-terraform-template
-          template: "{{inputs.parameters.git_ref_type}}"
+          template: main
 
