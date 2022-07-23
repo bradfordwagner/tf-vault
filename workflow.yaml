@@ -34,7 +34,7 @@ spec:
           - name: vault_secrets_enabled
             value: true
           - name: vault_role
-            value: vault_policy_scaffolding
+            value: azure_sp_infra_reader
           - name: vault_env_secrets_paths
             value: |
               ["secret/azure/sp/infra"]
