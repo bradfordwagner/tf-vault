@@ -53,6 +53,7 @@ resource "azurerm_key_vault" "vault" {
       "Update",
       "Purge",
       "Recover",
+      "GetRotationPolicy",
     ]
   }
 
