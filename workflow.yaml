@@ -32,13 +32,15 @@ spec:
           - name: terraform_image
             value: quay.io/bradfordwagner/terraform:1.6.0-ubuntu_focal
           - name: vault_secrets_enabled
-            value: true
+            value: false
           - name: vault_role
-            value: azure_sp_infra_reader
-          - name: vault_env_secrets_paths
-            value: |
-              ["secret/azure/sp/infra"]
+            value: ""
+          - name: vault_issue_token
+            value: false
+          - name: csi_class
+            value: sp-infra
+          - name: csi_secret
+            value: sp-infra
         templateRef:
           name: flavor-terraform-template
           template: main
-
