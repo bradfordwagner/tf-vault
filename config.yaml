@@ -1,0 +1,12 @@
+# created by init task for use with github actons
+workspaces:
+  - name: dev
+    path: ./environments/dev
+  - name: tst
+    path: ./environments/tst
+secrets:
+  auth:
+    approle:
+      role: gh_terraform
+  kv:
+    - path: secret/azure/sp/infra
