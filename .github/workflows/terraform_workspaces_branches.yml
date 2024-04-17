@@ -1,0 +1,71 @@
+name: terraform-workspaces-branches
+on:
+  - push
+  - workflow_dispatch
+jobs:
+  config-yaml:
+    name: config.yaml
+    runs-on: ubuntu-latest
+    outputs:
+      config: ${{ steps.config.outputs.config }}
+    steps:
+      - uses: actions/checkout@v4
+      # https://github.com/chrisdickinson/setup-yq/blob/latest/action.yml
+      - uses: chrisdickinson/setup-yq@v1.0.1
+        name: yq=v4.43.1
+        with:
+          yq-version: v4.43.1
+      - name: jq=1.7
+        uses: dcarbone/install-jq-action@v2
+        with:
+          version: 1.7
+      - name: export=config
+        id: config
+        run: echo "config=$(yq -oj '.' config.yaml | jq -cr)" >> $GITHUB_OUTPUT
+  branches:
+    permissions: write-all
+    name: ${{ matrix.workspace.name }}
+    runs-on: ubuntu-latest
+    needs: config-yaml
+    strategy:
+      fail-fast: false
+      matrix:
+        workspace: ${{ fromJSON(needs.config-yaml.outputs.config).workspaces }}
+    steps:
+      - name: checkout=self
+        uses: actions/checkout@v4
+      - name: task=3.35.1
+        uses: pnorton5432/setup-task@v1
+        with:
+          task-version: 3.35.1
+      - name: checkout=taskfiles@main
+        uses: actions/checkout@v4
+        with:
+          path: taskfiles
+          repository: bradfordwagner/taskfiles
+          ref: main
+      - name: vault=1.16.1
+        uses: cpanato/vault-installer@main
+        with:
+          vault-release: 1.16.1
+      - name: vault=login@https://bradfordwagner.com:8200
+        id: import-secrets
+        uses: hashicorp/vault-action@v3
+        with:
+          url: https://bradfordwagner.com:8200
+          method: approle
+          roleId: ${{ secrets.ROLE_ID }}
+          secretId: ${{ secrets.SECRET_ID }}
+          exportToken: true
+      - uses: hashicorp/setup-terraform@v3
+        name: terraform=1.5.7
+        with:
+          terraform_version: 1.5.7
+      - name: task=branches
+        run: |
+          workspace=$(echo '${{ toJson(matrix.workspace) }}'  | jq -rc '.')
+          task -t ./taskfiles/tasks/terraform.yml \
+            workspaces \
+            workspace=${workspace} \
+            target_tag=latest \
+            tf_action=plan
