@@ -1,9 +1,7 @@
 # created by init task for use with github actons
 workspaces:
-  - name: dev
-    path: ./environments/dev
-  - name: tst
-    path: ./environments/tst
+  - name: default
+    path: ./
 secrets:
   auth:
     approle:
